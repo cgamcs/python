@@ -1,0 +1,1 @@
+print("Tu cerveza se llama\n" + '"' + input("Dim el nombre de tu mascota: ") + input("Dime las siglas de tu primer nombre y apellido: ") + '"')
