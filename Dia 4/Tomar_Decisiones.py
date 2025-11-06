@@ -24,3 +24,15 @@ if edad < 18:
         print('Reprobado')
 else:
     print('Eres adulto')
+
+serie = 'N-02'
+
+match serie:
+    case 'N-01':
+        print('Samsung')
+    case 'N-02':
+        print('Google')
+    case 'N-03':
+        print('Vivo')
+    case _:
+        print('No existe ese producto')
