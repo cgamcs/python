@@ -8,7 +8,7 @@ from pathlib import Path
 
 shutil.unpack_archive('Proyecto+Dia+9.zip', 'Esxtraccion_Instrucciones', 'zip')
 
-dir = 'C:\\Users\\cesargael.garcia\\Documents\\01-PROYECTOS\\python\\Dia 9\\Esxtraccion_Instrucciones\\Mi_Gran_Directorio'
+dir = '/Dia 09\\Esxtraccion_Instrucciones\\Mi_Gran_Directorio'
 
 lista = []
 

@@ -15,11 +15,11 @@ archivo.close()
 # ruta = os.makedirs("C:\\Users\\cesargael.garcia\\Documents\\01-PROYECTOS\\curso-python\\otra")
 
 # Obtener nombre y directorio
-ruta = 'C:\\Users\\cesargael.garcia\\Documents\\01-PROYECTOS\\python\\Dia 6\\prueba.txt'
+ruta = 'C:\\Users\\cesargael.garcia\\Documents\\01-PROYECTOS\\python\\Dia 06\\prueba.txt'
 
 elemento = os.path.basename(ruta) # prueba.txt
-elemento = os.path.dirname(ruta) # C:\Users\cesargael.garcia\Documents\01-PROYECTOS\python\Dia 6
-elemento = os.path.split(ruta) # ('C:\\Users\\cesargael.garcia\\Documents\\01-PROYECTOS\\python\\Dia 6', 'prueba.txt')
+elemento = os.path.dirname(ruta) # C:\Users\cesargael.garcia\Documents\01-PROYECTOS\python\Dia 06
+elemento = os.path.split(ruta) # ('C:\\Users\\cesargael.garcia\\Documents\\01-PROYECTOS\\python\\Dia 06', 'prueba.txt')
 
 print(elemento)
 
