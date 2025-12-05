@@ -1,6 +1,7 @@
 from tkinter import *
 import random
 import datetime
+from tkinter import messagebox, filedialog
 
 operador = ''
 precios_comida = [1.32, 1.65, 2.31, 3.22, 1.22, 1.99, 2.05, 2.65]
@@ -127,9 +128,53 @@ def recibo():
         x += 1
 
     texto_recibo.insert(END, f'*' * 60 + '\n')
-    texto_recibo.insert(END, f'Costo de la comida: \t\t\t${var_costo_comida.get()}\n')
-    texto_recibo.insert(END, f'Costo de la bebida: \t\t\t${var_costo_bebida.get()}\n')
-    texto_recibo.insert(END, f'Costo de los postres: \t\t\t${var_costo_postre.get()}\n')
+    texto_recibo.insert(END, f'Costo de la comida: \t\t\t{var_costo_comida.get()}\n')
+    texto_recibo.insert(END, f'Costo de la bebida: \t\t\t{var_costo_bebida.get()}\n')
+    texto_recibo.insert(END, f'Costo de los postres: \t\t\t{var_costo_postre.get()}\n')
+    texto_recibo.insert(END, f'*' * 60 + '\n')
+    texto_recibo.insert(END, f'Subtotal: \t\t\t{var_subtotal.get()}\n')
+    texto_recibo.insert(END, f'Impuestos: \t\t\t{var_impuesto.get()}\n')
+    texto_recibo.insert(END, f'Total: \t\t\t{var_total.get()}\n')
+    texto_recibo.insert(END, f'*' * 60 + '\n')
+    texto_recibo.insert(END, 'LO ESPERAMOS PRONTO')
+
+def guardar():
+    info_recibo = texto_recibo.get(1.0, END)
+    archivo = filedialog.asksaveasfile(mode='w', defaultextension='.txt')
+    archivo.write(info_recibo)
+    archivo.close()
+    messagebox.showinfo('Guardado', 'Guardado correctamente')
+
+def resetear():
+    texto_recibo.delete(0.1, END)
+
+    for texto in texto_comida:
+        texto.set('0')
+    for texto in texto_bebida:
+        texto.set('0')
+    for texto in texto_postre:
+        texto.set('0')
+
+    for cuadro in cuadros_comida:
+        cuadro.config(state=DISABLED)
+    for cuadro in cuadros_bebida:
+        cuadro.config(state=DISABLED)
+    for cuadro in cuadros_postre:
+        cuadro.config(state=DISABLED)
+
+    for v in variables_comida:
+        v.set(0)
+    for v in variables_bebida:
+        v.set(0)
+    for v in variables_postre:
+        v.set(0)
+
+    var_costo_comida.set(0)
+    var_costo_bebida.set(0)
+    var_costo_postre.set(0)
+    var_subtotal.set(0)
+    var_impuesto.set(0)
+    var_total.set(0)
 
 # iniciar tkinter
 aplicacion = Tk()
@@ -144,25 +189,25 @@ aplicacion.resizable(False,False)
 aplicacion.title('Restaurante - Sistema de Facturación')
 
 # color de fondo de la ventana
-aplicacion.config(bg='white')
+aplicacion.config(bg='azure4')
 
 # panel superior
-panel_superior = Frame(aplicacion, bd=1, relief=FLAT)
+panel_superior = Frame(aplicacion, bd=0, relief=FLAT)
 panel_superior.pack(side=TOP)
 
 # etiqueta titulo
 etiqueta_titulo = Label(
     panel_superior,
     text='Sistema de Facturación',
-    fg='black',
+    fg='white',
     font=('Dosis', 58),
-    bg='white',
+    bg='azure4',
     width=23
 )
 etiqueta_titulo.grid(row=0, column=0)
 
 # panel izquiero
-panel_izquierdo = Frame(aplicacion, bd=1, relief=FLAT)
+panel_izquierdo = Frame(aplicacion, bd=0, relief=FLAT)
 panel_izquierdo.pack(side=LEFT)
 
 # panel costos
@@ -480,7 +525,9 @@ for boton in botones:
     columnas += 1
 
 botones_creados[0].config(command=total)
-botones_creados[0].config(command=recibo)
+botones_creados[1].config(command=recibo)
+botones_creados[2].config(command=guardar)
+botones_creados[3].config(command=resetear)
 
 # area de recibo
 texto_recibo = Text(
