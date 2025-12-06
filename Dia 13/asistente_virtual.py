@@ -77,7 +77,7 @@ def pedir_dia():
     print(dia_semana)
 
     # diccionario con nombres de dias
-    calendario = {0: 'Lunes',
+    dias_de_la_semana = {0: 'Lunes',
                   1: 'Martes',
                   2: 'Miercoles',
                   3: 'Jueves',
@@ -85,7 +85,23 @@ def pedir_dia():
                   5: 'Sabado',
                   6: 'Domingo'}
 
-    hablar(f'Hoy es {calendario[dia_semana]} {dia.day} de {dia.month}')
+    # diccionario con nombre del mes
+    meses = {
+        1: 'Enero',
+        2: 'Febrero',
+        3: 'Marzo',
+        4: 'Abril',
+        5: 'Mayo',
+        6: 'Junio',
+        7: 'Julio',
+        8: 'Agosto',
+        9: 'Septiembre',
+        10: 'Octubre',
+        11: 'Noviembre',
+        12: 'Diciembre'
+    }
+
+    hablar(f'Hoy es {dias_de_la_semana[dia_semana]} {dia.day} de {meses[dia.month]}')
 
 # informar la hora del dia
 def pedir_hora():
@@ -101,7 +117,8 @@ def pedir_hora():
 def saludo_inicial():
     # crear variable con datos de hora
     hora = datetime.datetime.now()
-    if hora.hour < 6 or hora.hour > 20:
+    print(hora.hour)
+    if hora.hour < 6 or hora.hour > 18:
         momento = 'Buenos noches'
     elif 6 <= hora.hour < 13:
         momento = 'Buenos días'
@@ -123,11 +140,11 @@ def pedir_cosas():
         # activar el micro y guardar el pedido en un string
         pedido = transformar_audio_en_texto().lower()
 
-        if 'abrir youtube' in pedido:
+        if 'abre youtube' in pedido:
             hablar('Con gusto estoy abriendo YouTube')
             webbrowser.open('https://www.youtube.com/')
             continue
-        elif 'abrir navegador' in pedido:
+        elif 'abre el navegador' in pedido:
             hablar('Con gusto estoy abriendo el navegador')
             webbrowser.open('https://www.google.com/')
             continue
@@ -150,7 +167,7 @@ def pedir_cosas():
             pedido = pedido.replace('busca en google', '')
             pywhatkit.search(pedido)
             hablar('Esto es lo que eh encontrado')
-        elif 'reproducir' in pedido:
+        elif 'reproduce' in pedido:
             hablar('Empezando a reproducir')
             pedido = pedido.replace('reproducir', '')
             pywhatkit.playonyt(pedido)
@@ -159,25 +176,36 @@ def pedir_cosas():
             hablar(pyjokes.get_joke(language='es'))
             continue
         elif 'precio de las acciones' in pedido:
-            accion = pedido.split('de')[-1].strip()
-            carteta = {'apple': 'APPL',
-                       'amazon': 'AMZN',
-                       'google': 'GOOGL',
-                       'palantir': 'PLTR',
-                       }
+            accion_nombre = pedido.split('de')[-1].strip().lower()
+
+            cartera = {
+                'apple': 'AAPL',
+                'amazon': 'AMZN',
+                'google': 'GOOGL',
+                'palantir': 'PLTR',
+            }
 
             try:
-                accion_buscada = carteta[accion]
-                accion_buscada = yf.Ticker(accion_buscada)
+                # Check if the stock is in our dictionary
+                if accion_nombre in cartera:
+                    ticker_symbol = cartera[accion_nombre]
+                    stock = yf.Ticker(ticker_symbol)
 
-                precio_actual = accion_buscada.info['regularMarketPrice']
+                    # 3. OPTIMIZATION: Use fast_info
+                    # .info is very slow (web scraping). .fast_info is much faster for just price.
+                    precio = stock.fast_info['last_price']
 
-                hablar(f'El precio de {accion_buscada} es {precio_actual}')
-                continue
-            except:
-                hablar('Perdon, pero no la eh encontrado')
-                continue
-        elif 'adiós' in pedido:
+                    # Format price to 2 decimal places for better speech
+                    hablar(f'El precio de las acciones de {accion_nombre} es {round(precio, 2)} dólares')
+                else:
+                    hablar(f'Lo siento, no tengo a {accion_nombre} en mi lista')
+
+            except Exception as e:
+                print(f"Error técnico: {e}")  # Print error to console for debugging
+                hablar('Hubo un error al intentar obtener el precio')
+
+            continue
+        elif 'hasta pronto' in pedido:
             hablar('Hasta pronto')
             break
 
